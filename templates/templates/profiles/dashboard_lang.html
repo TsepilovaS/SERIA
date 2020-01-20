@@ -1,0 +1,33 @@
+{% extends 'base_with_sidebar.html' %}
+{#{% load section_tags %}#}
+{#{% get_sections as languages %}#}
+
+{% block title %} Dashboard {% endblock %}
+{% block sidebar %}
+    <div class="bg-light border-right" id="sidebar-wrapper">
+      <div class="sidebar-heading">Sisha tests </div>
+      <div class="list-group list-group-flush">
+        <a href="{% url 'profiles:profile' %}" class="list-group-item list-group-item-action bg-light">Profile</a>
+        <form class="form-inline" method="GET" action="{% url 'profiles:dashboard_result' %}">
+      <input class="form-control" type="search" placeholder="Search" name="search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+          {% for language in languages %}
+            <a href="{% url 'profiles:dashboard_lang' lang=language.name%}" class="list-group-item list-group-item-action bg-light">{{language.name}} <span class="badge badge-primary badge-pill">{{ language.quizzes.count }}</span></a>
+        {% endfor %}
+      </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <br><br>
+    {% if lang.quizzes %}
+        <ul class="list-group">
+        {% for quiz in lang.quizzes %}
+  <a href="{% url 'profiles:quiz_start' quiz.id %}"><li class="list-group-item">{{quiz.name}}</li></a>
+        {% endfor %}
+        </ul>
+    {% else %}
+        There is no enought content yet
+    {% endif %}
+{% endblock %}

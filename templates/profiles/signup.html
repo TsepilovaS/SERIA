@@ -1,0 +1,35 @@
+{% extends 'base_no_sidebar.html' %}
+{% load crispy_forms_tags %}
+
+{# {% block sidebar %}#}
+{#     {% include '../partials/sidebar.html' %}#}
+{# {% endblock %}#}
+{% block content %}
+    <br><br><br>
+  <h2>Sign up</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit">Sign up</button>
+  </form>
+        <a href="{% url 'profiles:login' %}">Log in if you already have an account</a>
+{% endblock %}
+
+{% block js %}
+    <script>
+    $(window).on('load', function () {
+        if ($('#id_status').val() === "Teacher") {
+            $('#div_id_group').attr('hidden', 'hidden').val('')
+        } else {
+            $('#div_id_group').attr('hidden', false)
+        }
+    })
+    $('#id_status').on('change', function () {
+        if ($('#id_status').val() === "Teacher") {
+            $('#div_id_group').attr('hidden', 'hidden').val('')
+        } else {
+            $('#div_id_group').attr('hidden', false)
+        }
+    })
+    </script>
+{% endblock %}

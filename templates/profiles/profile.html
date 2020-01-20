@@ -1,0 +1,58 @@
+{% extends 'base_no_sidebar.html' %}
+
+{% block title %} Profile page {% endblock %}
+{% block content %}
+    <div class="row">
+    <div class="col-12">
+    <div class="card-body">
+                        <div class="card-title">
+                            <div class="d-flex">
+
+                                <div class="image-container">
+                                    <img src="{{ request.user.profile.avatar.url }}" id="imgProfile" style="width: 300px; height: 300px" class="img-thumbnail">
+                                </div>
+                                <div class="userData ml-3">
+                                    <h2 class="d-block" style="font-size: 1.5rem; font-weight: bold"><a href="javascript:void(0);">{{ request.user.username }}</a></h2>
+                                    <h6 class="d-block">Status: {{ status }}</h6>
+                                    {% if status == "Teacher" %}
+                                    <h6 class="d-block"><a href="#">{{group_count.count}}</a> groups</h6>
+                                        {% else %}
+                                        <h6 class="d-block"><a href="#">{{request.user.profile.quizzes_passed}}</a> quizzes passed</h6>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 text-center">
+                                <a href="{% url 'profiles:profile_update' %}"><button class="btn btn-block btn-primary">Edit profile</button></a>
+                            </div>
+        {% if status == "Teacher" %}
+
+
+                            <div class="col-3 text-center">
+                                <a href="{% url 'profiles:quiz_list' %}"><button class="btn btn-block btn-primary"><i class="far fa-file-alt"></i> Qizzes</button></a>
+                            </div>
+                            <div class="col-3 text-center">
+                                <a href="{% url 'profiles:stat' %}"><button class="btn btn-block btn-primary"><i class="fas fa-chart-bar"></i> Statistics</button></a>
+                            </div>
+
+            {% else %}
+                            <div class="col-3 text-center">
+                                <a href="{% url 'profiles:dashboard' %}"><button class="btn btn-block btn-primary">Dashboard</button></a>
+                            </div>
+
+                            <div class="col-3 text-center">
+                                <a href="{% url 'profiles:stat' %}"><button class="btn btn-block btn-primary"><i class="fas fa-chart-bar"></i> Statistics</button></a>
+                            </div>
+        {% endif %}
+                        <div class="col-3 text-center">
+                                <a href="{% url 'profiles:logout' %}"><button class="btn btn-block btn-danger">Logout</button></a>
+                            </div>
+                        </div>
+    </div>
+    </div>
+    </div>
+
+
+
+{% endblock %}

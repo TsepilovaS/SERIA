@@ -1,0 +1,55 @@
+{% extends 'base_with_sidebar.html' %}
+{#{% load section_tags %}#}
+{#{% get_sections as languages %}#}
+
+{% block title %} Dashboard {% endblock %}
+{% block sidebar %}
+    <div class="bg-light border-right" id="sidebar-wrapper">
+      <div class="sidebar-heading">Sisha tests </div>
+      <div class="list-group list-group-flush">
+        <a href="{% url 'profiles:profile' %}" class="list-group-item list-group-item-action bg-light">Profile</a>
+
+      <form class="form-inline" method="GET" action="{% url 'profiles:dashboard_result' %}">
+      <input class="form-control" type="search" placeholder="Search" name="search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+        {% for language in languages %}
+            <a href="{% url 'profiles:dashboard_lang' lang=language.name%}" class="list-group-item list-group-item-action bg-light">{{language.name}} <span class="badge badge-primary badge-pill">{{ language.quizzes.count }}</span></a>
+        {% endfor %}
+      </div>
+    </div>
+{% endblock %}
+{% block content %}
+    <br>
+    <br>
+    <br>
+    {% if quiz %}
+
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6">
+            <div class="jumbotron">
+              <h1 class="display-4">{{ quiz.name }}</h1>
+
+              <p class="lead">There is {{ quiz.questions.count }} questions in this quiz</p>
+            {% if attempts_left %}
+                <p class="lead">You have {{ attempts_left }} attempts left</p>
+            {% else %}
+                {% if at %}
+                    <p class="lead">You have infinity attempts</p>
+                    {% else %}
+                    <p class="lead">You have 0 attempts left</p>
+                    {% endif %}
+            {% endif %}
+              <hr class="my-4">
+              <p>{% if quiz.is_native %}Default quiz{% else %}Teacher {{ quiz.admin }} created it{% endif %}</p>
+              <a class="btn btn-primary btn-lg" href="{% url 'profiles:quiz_start' quiz.id %}" role="button">Start now</a>
+            </div>
+                </div>
+            <div class="col-3"></div>
+        </div>
+
+    {% else %}
+        No results, try again
+    {% endif %}
+{% endblock %}

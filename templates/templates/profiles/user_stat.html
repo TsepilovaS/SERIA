@@ -1,0 +1,23 @@
+{% extends 'base_no_sidebar.html' %}
+
+{% block content %}
+<h1>
+    Statistics
+</h1>
+
+{% if user_profile.group %}
+GROUP: {{ user_profile.group }}
+
+    {% if profiles %}
+        <ul>
+        {% for profile in profiles %}
+            <li>{{ profile.user.username }}:  {{ profile.right_answers }} answers out of {{ profile.right_answers|add:profile.wrong_answers }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% else %}
+    No group, add it first
+{% endif %}
+
+{% endblock %}

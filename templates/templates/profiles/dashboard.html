@@ -1,0 +1,38 @@
+{% extends 'base_with_sidebar.html' %}
+{#{% load section_tags %}#}
+{#{% get_sections as languages %}#}
+
+{% block title %} Dashboard {% endblock %}
+{% block sidebar %}
+    <div class="bg-light border-right" id="sidebar-wrapper">
+      <div class="sidebar-heading">Sisha tests </div>
+      <div class="list-group list-group-flush">
+        <a href="{% url 'profiles:profile' %}" class="list-group-item list-group-item-action bg-light">Profile</a>
+          <form class="form-inline" method="GET" action="{% url 'profiles:dashboard_result' %}">
+          <input class="form-control" type="search" placeholder="Search" name="search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+        {% for language in languages %}
+            <a href="{% url 'profiles:dashboard_lang' lang=language.name%}" class="list-group-item list-group-item-action bg-light">{{language.name}} <span class="badge badge-primary badge-pill">{{ language.quizzes.count }}</span></a>
+        {% endfor %}
+      </div>
+    </div>
+{% endblock %}
+{% block content %}
+    <br>
+    <br>
+    <br>
+    <div class="row">
+    <div class="col-3"></div>
+    <div class="col-6">
+    <div class="jumbotron">
+      <h1 class="display-4">Hello, programmers!</h1>
+      <p class="lead">This is the best site if you want to learn programming</p>
+      <hr class="my-4">
+      <p>Start with some basic tests (choose language on the left, then choose quiz) or find a test posted by your teacher</p>
+      <a class="btn btn-primary btn-lg" href="{% url 'profiles:profile' %}" role="button">Profile</a>
+    </div>
+        </div>
+    <div class="col-3"></div>
+    </div>
+{% endblock %}

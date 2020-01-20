@@ -1,0 +1,105 @@
+{% extends 'base_no_sidebar.html' %}
+
+{% block title %} Quiz {% endblock %}
+
+{% block content %}
+    <br>
+    <br>
+    <h1>{{ quiz.name }}</h1>
+    {% if quiz %}
+        {% if quiz.questions %}
+            {% for question in quiz.questions.all %}
+            <div class="card" id="{{ question.id }}">
+            <br>
+            <h3 class="text-center">{{ question.question_text }}</h3>
+            <ul>
+            {% for answer in question.answers.all %}
+                <label for="{{ quiz.id }}-{{ question.id }}-{{ answer.id }}">
+                    <li class="btn btn-outline-secondary">{{ answer.answer_text }}
+                        <input type="checkbox" {% if answer.is_right %}class="is-right my-check"{% else %}class="is-wrong my-check"{% endif %} name="{{ quiz.id }}-{{ question.id }}-{{ answer.id }}" id="{{ quiz.id }}-{{ question.id }}-{{ answer.id }}">
+                    </li>
+                </label>
+            {% endfor %}
+            </ul>
+            </div>
+                <br>
+            {% endfor %}
+            {% else %}
+            No questions
+            {% endif %}
+    {% else %}
+        No quiz
+    {% endif %}
+    <button class="btn btn-primary btn-block" id="finish">Finish quiz</button>
+    <a href="{% url 'profiles:dashboard' %}"><button class="btn btn-primary btn-block" hidden id="dashboard">Go to dashboard</button></a>
+
+
+    <br><br>
+    <div id="result"></div>
+
+{% endblock %}
+
+{% block js %}
+    <script>
+
+    function triggerColors() {
+            $('.card').each(function () {
+                $(this).find('.is-right').each(function () {
+                    $(this).parent().removeClass('btn-outline-secondary').addClass('btn-success');
+                });
+                $(this).find('.is-wrong').each(function () {
+                    if($(this).is(':checked')) {
+                        $(this).parent().removeClass('btn-outline-secondary').addClass('btn-danger');
+                    }
+                });
+            });
+        }
+
+        function showResult(right, wrong){
+
+        $('#result').html(`<h2> You got ${right} right and ${wrong} wrong </h2>`)
+        }
+
+        $('#finish').on('click', function () {
+            var quizId = {{ quiz.id }};
+            var rightCount = 0;
+            var wrongCount=0;
+            $('.card').each(function () {
+                var wrong = false;
+                $(this).find('.is-right').each(function () {
+                    if(!$(this).is(':checked')) {
+                        wrong = true
+                    }
+                });
+                $(this).find('.is-wrong').each(function () {
+                    if($(this).is(':checked')) {
+                        wrong = true
+                    }
+                });
+                if (wrong) {wrongCount++;} else {rightCount++}
+            });
+            {#alert(rightCount);#}
+            $('#finish').attr('hidden', 'true');
+            $('#dashboard').removeAttr('hidden');
+            triggerColors();
+            showResult(rightCount, wrongCount);
+
+            $.ajax({
+                url:'/profile/quiz/check/{{ attempt_id }}',
+                type: 'GET',  // http method
+                data: {
+                        quizId: quizId,
+                        right: rightCount,
+                        wrong: wrongCount
+                },  // data to submit
+                success: function (data, status, xhr) {
+
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                        $('p').append('Error' + errorMessage);
+                }
+            });
+        });
+
+    </script>
+{% endblock %}

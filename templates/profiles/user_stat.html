@@ -1,0 +1,28 @@
+{% extends 'base_no_sidebar.html' %}
+
+{% block content %}
+<h1>
+    Statistics
+</h1>
+
+{% if groups %}
+    {% for group in groups %}
+<h5>GROUP: {{ group.title }}</h5>
+
+    {% if group.profiles %}
+        <ul class="list-group">
+        {% for profile in group.profiles.all %}
+            <li class="list-group-item">{{ profile.user.username }}:  {{ profile.right_answers }} answers out of {{ profile.right_answers|add:profile.wrong_answers }}. Quizzes passed: {{ profile.quizzes_passed }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        Nobody is in the group
+    {% endif %}
+    {% endfor %}
+{% else %}
+     No group, add it first
+{% endif %}
+    <br><br>
+<a href="{% url 'profiles:profile' %}"><div class="btn btn-block btn-primary">Back to profile</div></a>
+
+{% endblock %}

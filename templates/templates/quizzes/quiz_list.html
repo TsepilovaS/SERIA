@@ -1,0 +1,28 @@
+{% extends 'base_no_sidebar.html' %}
+{% block content %}
+    <button class="btn btn-block"><h1>Quizzes</h1></button>
+    <br><br>
+<div class="row">
+    <div class="col-3">
+        <a href="{% url 'profiles:profile' %}" class="btn btn-primary">Back to profile page</a>
+    </div>
+    <div class="col-6">
+    {% if quizzes %}
+        {% for quiz in quizzes %}
+            <div class="card">
+              <div class="card-body">
+                  <a href="{% url 'profiles:quiz_detail' quiz.id %}"><h5 class="card-title">{{quiz.name}}</h5></a>
+                <p class="card-text"><a href="{% url 'profiles:question_list' pk=quiz.id %}">questions: {{quiz.questions.count}}</a></p>
+                <a href="{% url 'profiles:quiz_update' quiz.id%}" class="btn btn-primary">Update</a>
+                  <a href="{% url 'profiles:quiz_delete' quiz.id%}" class="btn btn-primary">Delete</a>
+                  <a href="{% url 'profiles:question_add' quiz.id %}">Add question</a>
+              </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        You have no quizzes. <a href="{% url 'profiles:quiz_add' %}">Add one</a>
+    {% endif %}
+    </div>
+    <div class="col-3"><a href="{% url 'profiles:quiz_add' %}" class="btn btn-primary">Add test <i class="fa fa-plus"></i> </a></div>
+</div>
+{% endblock %}

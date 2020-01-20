@@ -1,0 +1,21 @@
+{% extends 'base_no_sidebar.html' %}
+{% load crispy_forms_tags %}
+
+{# {% block sidebar %}#}
+{#     {% include '../partials/sidebar.html' %}#}
+{# {% endblock %}#}
+{% block content %}
+    <br><br>
+   <p>User {{ request.user.username }}</p>
+
+    <br>
+  <h2>Edit profile</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|crispy }}
+      <div id="div_id_group" class="form-group"> <label for="id_group" class="">
+                Group {% if request.user.is_admin %}(Type groups separated by commas, with no spaces){% endif %}
+            </label> <div class=""> <input type="text" name="group" class="form-control" id="id_group" value="{{ group }}"> </div> </div>
+    <button type="submit">Edit</button>
+  </form>
+{% endblock %}

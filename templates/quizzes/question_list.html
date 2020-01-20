@@ -1,0 +1,30 @@
+{% extends 'base_no_sidebar.html' %}
+{% block content %}
+        <button class="btn btn-block"><h1>Questions</h1></button>
+
+    <br><br>
+<div class="row">
+    <div class="col-3">
+        <a href="{% url 'profiles:quiz_list' %}" class="btn btn-primary">Back to quizzes</a>
+    </div>
+    {% if questions %}
+        <div class="col-6">
+        {% for question in questions %}
+            <div class="card">
+              <div class="card-body">
+{#                  <a href="{% url 'profiles:quiz_detail' quiz.id %}"><h5 class="card-title">{{quiz.name}}</h5></a>#}
+                  <h5 class="card-title">{{question.question_text}}</h5>
+                  <p class="card-text"><a href="{% url 'profiles:answer_list' pk=question.quiz.id pk2=question.id %}">answers: {{question.answers.count}}</a></p>
+                <a href="{% url 'profiles:question_update' pk=question.quiz.id pk2=question.id %}" class="btn btn-primary">Update</a>
+                  <a href="{% url 'profiles:question_delete' pk=question.quiz.id pk2=question.id %}" class="btn btn-primary">Delete</a>
+                  <a href="{% url 'profiles:answer_add' pk=question.quiz.id pk2=question.id %}">Add answer</a>
+              </div>
+            </div>
+        {% endfor %}
+         </div>
+    {% else %}
+        No questions
+    {% endif %}
+    <div class="col-3"><a href="{% url 'profiles:question_add' pk=questions.first.quiz.id %}" class="btn btn-primary">Add question <i class="fa fa-plus"></i> </a></div>
+</div>
+{% endblock %}

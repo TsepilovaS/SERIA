@@ -1,0 +1,31 @@
+{% extends 'base_no_sidebar.html' %}
+{% block content %}
+    <br><br>
+<h2>Name: {{ quiz.name }}</h2>
+<br>
+{% if quiz.questions %}
+    <ul>
+    {% for question in quiz.questions.all %}
+
+        <li><h4>Question: {{ question.question_text }}</h4></li>
+            {% if question.answers %}
+                <ul>
+                {% for answer in question.answers.all %}
+                    <li>
+                    <p {% if answer.is_right %}style="color: lawngreen"{% endif %}>
+                    {{ answer.answer_text }}
+                    </p>
+                    </li>
+                {% endfor %}
+                </ul>
+                {% else %}
+                No answers
+            {% endif %}
+    {% endfor %}
+    </ul>
+{% else %}
+    No questions
+{% endif %}
+<a href="{% url 'profiles:quiz_list' %}" class="btn btn-block btn-primary">Back to all</a>
+{% endblock %}
+
